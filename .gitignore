@@ -1,5 +1,5 @@
 /src/eigen/*
-/data/sample_submission.csv
-/data/test.csv
-/data/train.csv
+/data/*/*.csv
+/data/*/*.result
 .*.swp
+.venv
