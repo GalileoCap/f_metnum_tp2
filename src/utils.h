@@ -5,8 +5,10 @@
 
 #include <math.h>
 #include <vector>
+#include <map>
 #include <fstream>
-//#include <iostream>
+#include <sstream>
+#include <iostream>
 #include <stdio.h>
 //#include <string.h>
 #include <chrono>
@@ -19,6 +21,16 @@ typedef long int time_t;
 typedef Eigen::Matrix<floating_t, Eigen::Dynamic, Eigen::Dynamic> Matrix;
 
 time_t get_time(); //U: Returns the current time in milliseconds
+
+struct SortedDistances {
+  SortedDistances(uint);
+
+  void push_back(uint, floating_t);
+  uint consensus() const;
+
+  std::vector<std::pair<uint, floating_t>> v;
+  uint n;
+};
 
 #include "utils.cpp"
 #endif
