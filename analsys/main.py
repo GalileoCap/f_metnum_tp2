@@ -11,6 +11,6 @@ if __name__ == '__main__':
 	_, _, _, expected = data
 
 	sys = SkSystem(data, k, usePca, n) #A: Run sklearn code
-	times, results = run(fpath, k, usePca, n, niters) #A: Run c++ code
+	_, results = run(fpath, k, usePca, n, niters) #A: Run c++ code
 
 	print(precision(results, expected), precision(sys.results, expected))

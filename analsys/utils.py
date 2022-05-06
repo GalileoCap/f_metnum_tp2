@@ -31,7 +31,7 @@ def split_data(fpath, pct = 0.4):
 
 def parse_results(fpath):
 	with open(fpath, 'r') as fin:
-		times, results = [[int(x) for x in line] for line in fin.read().split('\n')]
+		times, results = [[int(x) for x in line.split()] for line in fin.read().split('\n')]
 	return (
 		(times[0], times[1:]), #A: Split PCA time from guesses
 		results
