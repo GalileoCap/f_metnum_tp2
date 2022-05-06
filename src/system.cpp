@@ -35,6 +35,7 @@ System::System(char *pathIn) { //U: Loads training data
 }
 
 void System::calc_pca(uint n, uint niter) { //U: Calculates first n eigenvalues and eigenvectors using power iteration, calculates and reduces M so that Mx = tc(x), and updates X with this new M; NOTE: Assumes at least one vector in X
+  time_t start = get_time();
   //S: Power iteration
   Matrix _M(M); M = Matrix(n, M.cols()); //A: Copy and remove every component from the original
   for (uint i = 0; i < n; i++) { //A: Iterate for each eigenvector
@@ -46,6 +47,7 @@ void System::calc_pca(uint n, uint niter) { //U: Calculates first n eigenvalues 
   }
 
   for (uint i = 0; i < X.size(); i++) X[i].first = M * X[i].first; //A: Apply tc(x) for each training vector
+  times.push_back(get_time() - start);
 }
 
 void System::guess(char *pathIn, uint k) { //U: Makes a guess for an entire file of vectors //TODO: Repeated code with the constructor
