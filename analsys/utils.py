@@ -39,16 +39,15 @@ def parse_training_data(fpath):
 
 	return X_train, X_test, Y_train, Y_test
 
-def save_results(results, fpath):
-	with open(fpath, 'w') as fout:
-		fout.write('0 0\n') #A: Empty line instead of times
-		fout.write(' '.join([str(x) for x in results])) #A: Line of results
-
 def parse_results(fpath):
 	with open(fpath, 'r') as fin:
-		times, results = [[int(x) for x in line.split()] for line in fin.read().split('\n')]
+		lines = fin.read().splitlines()
+	times = [int(x) for x in lines[0].split()],
+	eigens = [[float(x) for x in line.split()] for line in lines[1:-1]]
+	results = [int(x) for x in lines[-1].split()]
 	return (
 		(times[0], times[1:]), #A: Split PCA time from guesses
+		eigens,
 		np.array(results)
 	)
 
@@ -61,5 +60,3 @@ def run(params, fpath):
 		str(k),
 	] + ([str(n), str(niters)] if usePca else [])
 	subprocess.run(f'../tp2 {" ".join(args)}', shell = True)
-
-	return parse_results(results_mine_fpath(fpath))

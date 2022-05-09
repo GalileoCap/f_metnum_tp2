@@ -11,7 +11,7 @@ struct System {
   void guess(char*, uint); //U: Makes a guess for an entire file of vectors
   uint guess(Matrix, uint) const; //U: Makes a guess for a single vector
 
-  void save_results(char*) const;
+  void save_results(char*, bool) const;
 
   std::vector<std::pair<Matrix, uint>> X; //U: Data used to train the system TODO: Optimize for quickly getting nearest neighbors 
   Matrix M, //U: Covariance matrix 

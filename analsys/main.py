@@ -4,7 +4,7 @@ from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, r
 
 def metrics(true_results, results):
 	scores = dict()
-	for k, v in results.items():
+	for k, (_, _, v) in results.items():
 		labels, average = range(1, 10), 'macro' #TODO: Labels as a parameter
 		scores[k] = {
 			'confusion_matrix': confusion_matrix(true_results, v, labels = labels),
@@ -17,18 +17,18 @@ def metrics(true_results, results):
 	return scores
 
 if __name__ == '__main__':
-	params, pct, replace = (5, False, None, None), 0.3, True
-	fpath = '../data/kaggle/small'
+	params, pct, replace = (5, True, 10, 1000), 0.4, False
+	fpath = '../data/kaggle/smaller'
 
 	if replace:
 		split_data(pct, fpath)
 		run(params, fpath) #A: Run c++ code
 		SkSystem(params, fpath) #A: Run sklearn code
 
-	true_results = parse_training_data(fpath)[3]
+	_, _, _, true_results = parse_training_data(fpath)
 	results = {
-		'mine': parse_results(results_mine_fpath(fpath))[1],
-		'sklearn': parse_results(results_sklearn_fpath(fpath))[1],
+		'mine': parse_results(results_mine_fpath(fpath)),
+		'sklearn': parse_results(results_sklearn_fpath(fpath)),
 	}
 	scores = metrics(true_results, results)
 	print(scores)

@@ -84,9 +84,11 @@ uint System::guess(Matrix x, uint k) const { //U: Makes a guess for a single vec
   return distances.consensus(); //A: Return the label with most consensus
 }
 
-void System::save_results(char *pathOut) const { //U: Writes the times and results to a file
+void System::save_results(char *pathOut, bool usePCA) const { //U: Writes the times, eigenvectors, and the results to a file
   std::ofstream fout(pathOut);
   for (const time_t& t : times) fout << t << ' '; fout << '\n';
+  if (usePCA) for (uint i = 0; i < M.rows(); i++) fout << M.row(i) << '\n'; //A: Print PCA's eigenvectors
+  else fout << '\n'; //A: Empty line
   for (uint n : results) fout << n << ' ';
   fout.close();
 }
