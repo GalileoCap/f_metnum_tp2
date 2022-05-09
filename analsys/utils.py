@@ -44,7 +44,7 @@ def run(fpath, k = 5, usePca = False, n = None, niters = None):
 		f'./{csv_fpath(test_fpath(fpath))}',
 		f'./{result_fpath(fpath)}',
 		str(k),
-	] + (['1', str(n), str(niters)] if usePca else [])
+	] + ([str(n), str(niters)] if usePca else [])
 	subprocess.run(f'../tp2 {" ".join(args)}', shell = True)
 
 	return parse_results(result_fpath(fpath))
