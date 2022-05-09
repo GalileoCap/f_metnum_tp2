@@ -1,5 +1,5 @@
 /src/eigen/*
 /data/*/*.csv
-/data/*/*.result
+/data/*/*.results
 .*.swp
 .venv

@@ -1,16 +1,34 @@
 from utils import *
 from system import SkSystem
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, cohen_kappa_score
 
-def precision(results, expected):
-	return (expected == results).sum() / expected.shape[0]
+def metrics(true_results, results):
+	scores = dict()
+	for k, v in results.items():
+		labels, average = range(1, 10), 'macro' #TODO: Labels as a parameter
+		scores[k] = {
+			'confusion_matrix': confusion_matrix(true_results, v, labels = labels),
+			'accuracy': accuracy_score(true_results, v), #TODO: Balanced?
+			'precision': precision_score(true_results, v, labels = labels, average = average), 
+			'recall': recall_score(true_results, v, labels = labels, average = average),
+			'f1': f1_score(true_results, v, labels = labels, average = average),
+			'cohen_kappa': cohen_kappa_score(true_results, v, labels = labels),
+		}
+	return scores
 
 if __name__ == '__main__':
-	k, usePca, n, niters, pct = 5, False, None, None, 0.4
+	params, pct, replace = (5, False, None, None), 0.3, True
 	fpath = '../data/kaggle/small'
-	data = split_data(fpath, pct)
-	_, _, _, expected = data
 
-	sys = SkSystem(data, k, usePca, n) #A: Run sklearn code
-	_, results = run(fpath, k, usePca, n, niters) #A: Run c++ code
+	if replace:
+		split_data(pct, fpath)
+		run(params, fpath) #A: Run c++ code
+		SkSystem(params, fpath) #A: Run sklearn code
 
-	print(precision(results, expected), precision(sys.results, expected))
+	true_results = parse_training_data(fpath)[3]
+	results = {
+		'mine': parse_results(results_mine_fpath(fpath))[1],
+		'sklearn': parse_results(results_sklearn_fpath(fpath))[1],
+	}
+	scores = metrics(true_results, results)
+	print(scores)

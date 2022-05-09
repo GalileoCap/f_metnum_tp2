@@ -1,12 +1,15 @@
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.decomposition import PCA
 
-from sklearn.model_selection import train_test_split
 import pandas as pd
+from utils import *
 
 class SkSystem:
-	def __init__(self, data, k, usePca, n):
-		X_train, X_test, Y_train, _ = data
+	def __init__(self, params, fpath):
+		print('SkSystem RUN', params)
+		k, usePca, n, _ = params
+
+		X_train, X_test, Y_train, _ = parse_training_data(fpath)
 		self.X_train = X_train.to_numpy()
 		self.X_test = X_test.to_numpy()
 		self.Y_train = Y_train
@@ -14,6 +17,7 @@ class SkSystem:
 		if usePca:
 			self.calc_pca(n)
 		self.guess(k)
+		save_results(self.results, results_sklearn_fpath(fpath))
 
 	def calc_pca(self, n): #U: Calculates the pca transform and transforms the training data to use it #TODO: niters?
 		pca = PCA(n)

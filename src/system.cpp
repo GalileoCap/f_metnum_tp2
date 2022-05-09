@@ -59,14 +59,14 @@ void System::guess(char *pathIn, uint k) { //U: Makes a guess for an entire file
   //S: Read header line
   std::getline(fin, line); 
   for (const char &c : line) n += c == ','; //A: n = #cols = size of each vector
-  n++;
   
   //S: Read vectors
   while (std::getline(fin, line)) {
     Matrix x(n, 1); //A: Vector of 1xn
 
     std::stringstream str(line);
-    for (uint i = 0; i < n; i++) str >> x(i, 0) >> ignore; //A: Read each pixel while skipping over commas
+    str >> ignore; //A: Skip over label
+    for (uint i = 0; i < n; i++) str >> ignore >> x(i, 0); //A: Read each pixel while skipping over commas
     
     time_t start = get_time();
     results.push_back(guess(x, k));

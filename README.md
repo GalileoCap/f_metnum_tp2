@@ -15,7 +15,7 @@ Para compilar primero hay que descomprimir `./src/eigen.tar.gz` en el mismo dire
 
 El programa tiene dos archivos de entrada y uno de salida:
 * El primero de entrada son los datos de entrenamiento, un csv con la primera columna siendo eel label y el resto siendo los pixeles 
-* El segundo de entrada son los datos para adivinar, tiene el mismo formato que el de entrenamiento, sin la columna label
+* El segundo de entrada son los datos para adivinar, tiene el mismo formato que el de entrenamiento
 * El de salida es un archivo con dos lineas, una de los tiempos que tomó calcular pca (si aplica) y adivinar cada vector de prueba
 
 ### Corriendo el programa
@@ -27,7 +27,7 @@ El programa tiene tres parámetros obligatorios y otros tres opcionales:
 * Cantidad de vecinos cercanos que revisar
 * Cantidad de autovectores para calcular en el PCA
 * Cantidad de iteraciones para calcular autovectores en el PCA
-Para usar PCA hay que pasar la cantidad de autovectores para calcular  
+Para usar PCA hay que pasar al menos la cantidad de autovectores para calcular  
 NOTA: Los parámetros opcionales tienen que ser agregados en órden
 
 Ejemplos:
