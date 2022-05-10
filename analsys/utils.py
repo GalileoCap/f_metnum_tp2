@@ -57,6 +57,6 @@ def run(params, fpath):
 		f'./{csv_fpath(train_fpath(fpath))}',
 		f'./{csv_fpath(test_fpath(fpath))}',
 		f'./{results_mine_fpath(fpath)}',
-		str(k),
-	] + ([str(n), str(niters)] if usePca else [])
+		f'-k {k}',
+	] + ([f'-n {n}', f'-i {niters}'] if usePca else [])
 	subprocess.run(f'../tp2 {" ".join(args)}', shell = True)

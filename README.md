@@ -27,14 +27,10 @@ El programa tiene tres parámetros obligatorios y otros tres opcionales:
 * Cantidad de vecinos cercanos que revisar
 * Cantidad de autovectores para calcular en el PCA
 * Cantidad de iteraciones para calcular autovectores en el PCA
-Para usar PCA hay que pasar al menos la cantidad de autovectores para calcular  
-NOTA: Los parámetros opcionales tienen que ser agregados en órden
+Para usar PCA hay que pasar la cantidad de autovectores para calcular  
 
-Ejemplos:
+Ejemplo:
 ~~~
-./tp2 ./data/kaggle/train.csv ./data/kaggle/test.csv ./data/kaggle/results.csv
-./tp2 ./data/kaggle/train.csv ./data/kaggle/test.csv ./data/kaggle/results.csv 50 
-./tp2 ./data/kaggle/train.csv ./data/kaggle/test.csv ./data/kaggle/results.csv 50 100 
-./tp2 ./data/kaggle/train.csv ./data/kaggle/test.csv ./data/kaggle/results.csv 50 100 1000 
+./tp2 ./data/kaggle/train.csv ./data/kaggle/test.csv ./data/kaggle/results.csv -k 50 -n 100 -i 1000 
 ~~~
 
