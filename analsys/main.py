@@ -2,6 +2,10 @@ from utils import *
 from system import SkSystem
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, cohen_kappa_score
 
+import plotly.graph_objects as go
+import plotly.express as px
+from plotly.subplots import make_subplots
+
 def metrics(true_results, results):
 	scores = dict()
 	for k, (_, _, v) in results.items():
@@ -16,9 +20,22 @@ def metrics(true_results, results):
 		}
 	return scores
 
+def print_pca(results, fpath):
+	for k, (_, eigens, _) in results.items():
+		fig = make_subplots(rows = ceil(len(eigens), 4), cols = 4)
+		for i, eigen in enumerate(eigens):
+			fig.add_trace(
+				px.imshow(np.array(eigen).reshape(28, 28)).data[0],
+				row = (i // 4) + 1,
+				col = (i % 4) + 1,
+			)
+		layout = px.imshow(np.array(eigens[0]).reshape(28, 28), color_continuous_scale='gray').layout
+		fig.layout.coloraxis = layout.coloraxis
+		fig.write_image(img_fpath(f'{fpath}.{k}.eigens'))
+
 if __name__ == '__main__':
-	params, pct, replace = (5, True, 10, 1000), 0.4, False
-	fpath = '../data/kaggle/smaller'
+	params, pct, replace = (50, True, 12, 1000), 0.4, False
+	fpath = '../data/kaggle/small'
 
 	if replace:
 		split_data(pct, fpath)
@@ -31,4 +48,5 @@ if __name__ == '__main__':
 		'sklearn': parse_results(results_sklearn_fpath(fpath)),
 	}
 	scores = metrics(true_results, results)
+	print_pca(results, fpath)
 	print(scores)

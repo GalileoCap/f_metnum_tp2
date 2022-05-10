@@ -5,6 +5,9 @@ import pandas as pd
 def csv_fpath(fpath):
 	return f'{fpath}.csv'
 
+def img_fpath(fpath):
+	return f'{fpath}.png'
+
 def train_fpath(fpath):
 	return f'{fpath}.train'
 
@@ -19,6 +22,9 @@ def results_mine_fpath(fpath):
 
 def results_sklearn_fpath(fpath):
 	return f'{fpath}.sklearn.results'
+
+def ceil(a, b):
+	return -1 * (-a // b)
 
 def split_data(pct, fpath):
 	df = pd.read_csv(csv_fpath(fpath))
