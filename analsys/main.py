@@ -3,10 +3,7 @@ import plot
 import metrics
 from utils import *
 
-if __name__ == '__main__':
-	params, pct, replace = (50, True, 12, 1000), 0.4, False
-	fpath = '../data/kaggle/small'
-
+def compare(params, pct, fpath, replace):
 	if replace:
 		split_data(pct, fpath)
 		run(params, fpath) #A: Run c++ code
@@ -21,3 +18,6 @@ if __name__ == '__main__':
 	plot.eigens(results, fpath)
 
 	print(scores)
+
+if __name__ == '__main__':
+	compare((50, True, 12, 1000), 0.4, '../data/kaggle/small', True)
