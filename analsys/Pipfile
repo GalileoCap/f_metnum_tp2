@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+plotly = "==5.8.0"
 
 [dev-packages]
 
