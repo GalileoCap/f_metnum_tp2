@@ -5,6 +5,9 @@ import pandas as pd
 def csv_fpath(fpath):
 	return f'{fpath}.csv'
 
+def img_fpath(fpath):
+	return f'{fpath}.png'
+
 def train_fpath(fpath):
 	return f'{fpath}.train'
 
@@ -19,6 +22,9 @@ def results_mine_fpath(fpath):
 
 def results_sklearn_fpath(fpath):
 	return f'{fpath}.sklearn.results'
+
+def ceil(a, b):
+	return -1 * (-a // b)
 
 def split_data(pct, fpath):
 	df = pd.read_csv(csv_fpath(fpath))
@@ -57,6 +63,6 @@ def run(params, fpath):
 		f'./{csv_fpath(train_fpath(fpath))}',
 		f'./{csv_fpath(test_fpath(fpath))}',
 		f'./{results_mine_fpath(fpath)}',
-		str(k),
-	] + ([str(n), str(niters)] if usePca else [])
+		f'-k {k}',
+	] + ([f'-n {n}', f'-i {niters}'] if usePca else [])
 	subprocess.run(f'../tp2 {" ".join(args)}', shell = True)
