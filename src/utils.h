@@ -23,8 +23,6 @@ typedef long int time_t;
 typedef Eigen::Matrix<floating_t, Eigen::Dynamic, Eigen::Dynamic> Matrix;
 
 time_t get_time(); //U: Returns the current time in milliseconds
-template<class T>
-typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type almost_equal(T x, T y, int ulp);
 
 struct SortedDistances {
   SortedDistances(uint);

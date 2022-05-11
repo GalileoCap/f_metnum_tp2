@@ -5,12 +5,6 @@ long get_time() { //U: Returns the current time in milliseconds
   return std::chrono::duration_cast<std::chrono::nanoseconds>(start.time_since_epoch()).count();
 }
 
-template<class T>
-typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type almost_equal(T x, T y, int ulp) {
-  return std::fabs(x-y) <= std::numeric_limits<T>::epsilon() * std::fabs(x+y) * ulp
-    || std::fabs(x-y) < std::numeric_limits<T>::min();
-}
-
 SortedDistances::SortedDistances(uint _n) : n(_n) {}
 
 void SortedDistances::push_back(uint label, floating_t d) {
