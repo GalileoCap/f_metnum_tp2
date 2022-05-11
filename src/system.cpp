@@ -39,9 +39,12 @@ void System::calc_pca(uint n, uint niter) { //U: Calculates first n eigenvalues 
   //S: Power iteration
   Matrix _M(M); M = Matrix(n, M.cols()); //A: Copy and remove every component from the original
   for (uint i = 0; i < n; i++) { //A: Iterate for each eigenvector
-    Matrix v = Matrix::Random(_M.rows(), 1); //A: Start with a random vector
-    for (uint j = 0; j < niter; j++) v = (_M * v).normalized(); //A: Iterate niter times
-    floating_t lambda = ((v.transpose() * (_M * v)) / v.norm())(0); //A: Calculate eigenvalue; NOTE: The result is a 1x1 matrix
+    Matrix v = Matrix::Random(_M.rows(), 1); //A: Start with a random vector //TODO: Check it's not zero
+    floating_t lambda = 1;
+    for (uint j = 0; j < niter && !almost_equal(_M * v, lambda * v, 2); j++) { //A: Iterate until the result is close enough or reached max iters //TODO: Warn if reached max iters
+      v = (_M * v).normalized(); 
+      lambda = ((v.transpose() * (_M * v)) / v.norm())(0); //A: Calculate eigenvalue; NOTE: The result is a 1x1 matrix
+    }
     _M -= lambda * v * v.transpose(); //A: Remove this component from _M
     M.row(i) = v.transpose(); //A: Add this component to M //TODO: Should I multiply by lambda?
   }
