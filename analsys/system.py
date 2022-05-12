@@ -7,7 +7,7 @@ from utils import *
 class SkSystem:
 	def __init__(self, params, fpath):
 		print('SkSystem RUN', params)
-		k, self.usePCA, n, niters = params
+		k, self.usePCA, n, _ = params
 
 		X_train, X_test, Y_train, _ = parse_training_data(fpath)
 		self.X_train = X_train.to_numpy()
@@ -15,12 +15,12 @@ class SkSystem:
 		self.Y_train = Y_train
 
 		if self.usePCA:
-			self.calc_pca(n, niters)
+			self.calc_pca(n)
 		self.guess(k)
 		self.save_results(results_sklearn_fpath(fpath))
 
-	def calc_pca(self, n, niters): #U: Calculates the pca transform and transforms the training data to use it #TODO: niters?
-		self.pca = PCA(n, iterated_power = niters)
+	def calc_pca(self, n): #U: Calculates the pca transform and transforms the training data to use it #TODO: niters?
+		self.pca = PCA(n)
 		self.pca.fit(self.X_train)
 		self.X_train = self.pca.transform(self.X_train)
 		self.X_test = self.pca.transform(self.X_test)

@@ -2,6 +2,9 @@ import subprocess
 import numpy as np
 import pandas as pd
 
+def pandas_fpath(fpath):
+	return f'{fpath}.csv.gz'
+
 def csv_fpath(fpath):
 	return f'{fpath}.csv'
 
@@ -58,6 +61,7 @@ def parse_results(fpath):
 	)
 
 def run(params, fpath):
+	print(f'MySystem RUN params {params}, fpath {fpath}')
 	k, usePca, n, niters = params
 	args = [
 		f'./{csv_fpath(train_fpath(fpath))}',
@@ -65,4 +69,5 @@ def run(params, fpath):
 		f'./{results_mine_fpath(fpath)}',
 		f'-k {k}',
 	] + ([f'-n {n}', f'-i {niters}'] if usePca else [])
-	subprocess.run(f'../tp2 {" ".join(args)}', shell = True)
+	subprocess.run(f'../tp2 {" ".join(args)}', shell = True, capture_output = True)
+	#TODO: Check if error

@@ -22,3 +22,23 @@ def eigens(results, fpath):
 		fig.update_yaxes(showticklabels = False) # hide all the xticks
 		fig.write_image(img_fpath(f'{fpath}.{k}.eigens'))
 
+def go_scatter(df, x, y, name):
+	return go.Scatter(
+		x = df[x],
+		y = df[y],
+		name = name,
+	)
+
+def exp0(df, fpath):
+	for y in ['accuracy']:
+		for x in ['k', 'n']:
+			fig = go.Figure()
+			for i in (range(1, 11) if x == 'k' else range(10, 51, 10)): #A: Only trace some n's and k's #TODO: Change range
+				_df = df[(df['whose'] == 'mine') & (df['n' if x == 'k' else 'k'] == i)] #TODO: Different whose
+				fig.add_trace(go_scatter(_df, x, y, f'{"α" if x == "k" else "k"} = {i}'))
+				fig.update_layout(
+					# legend_title = 'Cantidad de componentes', #TODO
+					xaxis_title = x,
+					yaxis_title = y,
+				)
+			fig.write_image(img_fpath(f'{fpath}.exp0.{y}.{x}'))
