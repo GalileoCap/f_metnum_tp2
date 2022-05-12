@@ -1,25 +1,18 @@
-import metrics
 import plot
-from system import SkSystem
 import pandas as pd
+from system import *
 from utils import *
 
 def exp0_fpath(fpath):
 	return f'{fpath}.exp0'
 
 def exp0_run_instance(params, fpath):
-	run(params, fpath) #A: Run c++ code
-	SkSystem(params, fpath) #A: Run sklearn code
-	results = {
-		'mine': parse_results(results_mine_fpath(fpath)),
-		'sklearn': parse_results(results_sklearn_fpath(fpath)),
-	}
+	mySys = MySystem(params, fpath) #A: Run c++ code
+	skSys = SkSystem(params, fpath) #A: Run sklearn code
 
 	(k, _, n, _) = params
-	_, _, _, true_results = parse_training_data(fpath)
-	scores = metrics.scores(true_results, results)
-	for s in scores:
-		s.update({'k': k, 'n': n})
+	scores = [mySys.scores.copy(), skSys.scores.copy()] #A: Add k and n to each row
+	for s in scores: s.update({'k': k, 'n': n})
 	return scores 
 
 def exp0_run(range_k, range_n, fpath):
@@ -53,4 +46,4 @@ def exp0(range_k, range_n, fpath, replace): #U: Runs the program with different 
 if __name__ == '__main__':
 	fpath = '../data/kaggle/small'
 	split_data(0.4, fpath)
-	exp0(range(10, 50 + 1, 10), range(0, 10 + 1), fpath, True)
+	exp0(range(10, 50 + 1, 10), range(0, 10 + 1), fpath, False)

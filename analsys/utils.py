@@ -60,14 +60,3 @@ def parse_results(fpath):
 		np.array(results)
 	)
 
-def run(params, fpath):
-	print(f'MySystem RUN params {params}, fpath {fpath}')
-	k, usePca, n, niters = params
-	args = [
-		f'./{csv_fpath(train_fpath(fpath))}',
-		f'./{csv_fpath(test_fpath(fpath))}',
-		f'./{results_mine_fpath(fpath)}',
-		f'-k {k}',
-	] + ([f'-n {n}', f'-i {niters}'] if usePca else [])
-	subprocess.run(f'../tp2 {" ".join(args)}', shell = True, capture_output = True)
-	#TODO: Check if error
