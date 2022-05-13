@@ -2,12 +2,11 @@ import plotly.graph_objects as go
 import plotly.express as px
 from plotly.subplots import make_subplots
 
-import numpy as np
 from utils import *
 
 def eigens(results, fpath):
 	for k, (_, eigens, _) in results.items():
-		fig = make_subplots(rows = ceil(len(eigens), 4), cols = 4, subplot_titles = [f'Componente #{i+1}' for i in range(len(eigens))])
+		fig = make_subplots(rows = ceil(len(eigens) / 4), cols = 4, subplot_titles = [f'Componente #{i+1}' for i in range(len(eigens))])
 		for i, eigen in enumerate(eigens):
 			fig.add_trace(
 				px.imshow(np.array(eigen).reshape(28, 28)).data[0],

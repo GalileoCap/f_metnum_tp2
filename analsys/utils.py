@@ -32,12 +32,14 @@ def results_fpath(path, whose): #U: Gets the path to someone's results
 def img_fpath(fpath): #U: Adds the correct image extension
 	return f'{fpath}.png'
 
-def ceil(a, b):
-	return -1 * (-a // b)
+def ceil(x):
+	return int(x) + (int(x) < x)
 
-def split_data(name, path): #U: Splits an original dataset (name) and saves the result in path
+def split_data(name, path, frac = 0.4, subset = None): #U: Splits an original dataset (name) and saves the result in path, if subset, only keeps #subset rows from the original df
 	df = pd.read_csv(full_fpath(name))
-	train = df.sample(frac = 0.4) #A: Split train and test #TODO: Change frac after experimenting
+	if not subset is None: #TODO: Read subset random rows directly from the csv
+		df = df.drop(np.random.choice(df.index, len(df) - subset, replace = False))
+	train = df.sample(frac = frac) #A: Split train and test 
 	test = df.drop(train.index)
 
 	train.to_csv(train_fpath(path), index = False) #A: Save them
