@@ -11,16 +11,17 @@ struct System {
   void calc_pca(uint, uint); //U: Calculates first n eigenvalues and eigenvectors using power iteration, reduces M and updates X to only use those
 
   void guess(char*, uint); //U: Makes a guess for an entire file of vectors
-  uint guess(Matrix, uint) const; //U: Makes a guess for a single vector
+  void guess(Entry&, uint); //U: Makes a guess for a single vector
 
-  void read_vectors(char*, std::vector<std::pair<Matrix, uint>>&); //U: Reads a file of vectors and adds them to X
+  void read_vectors(char*, std::list<Entry>&); //U: Reads a file of vectors and adds them to X
   void save_results(char*, bool) const;
 
-  std::vector<std::pair<Matrix, uint>> X; //U: Data used to train the system TODO: Optimize for quickly getting nearest neighbors 
-  Matrix M, //U: Covariance matrix 
-         avg; //U: Average vector
-  std::vector<uint> results; //U: Resulting values
-  std::vector<time_t> times; //U: Profiling times
+  std::list<Entry>
+    X, //U: Data used to train the system //TODO: Optimize for quickly getting nearest neighbors 
+    Y; //U: Vectors to guess with their guessed result
+  Matrix M; //U: Covariance matrix 
+  Vector avg; //U: Average vector
+  std::list<time_t> times; //U: Profiling times
 };
 
 #include "system.cpp"

@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <type_traits>
 #include <cmath>
+#include <list>
 #include <vector>
 #include <map>
 #include <fstream>
@@ -21,6 +22,8 @@ typedef unsigned int uint;
 typedef long double floating_t;
 typedef long int time_t;
 typedef Eigen::Matrix<floating_t, Eigen::Dynamic, Eigen::Dynamic> Matrix;
+typedef Eigen::Vector<floating_t, Eigen::Dynamic> Vector;
+typedef std::pair<Vector, uint> Entry; //TODO: Rename
 
 time_t get_time(); //U: Returns the current time in milliseconds
 
