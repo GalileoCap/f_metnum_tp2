@@ -60,7 +60,8 @@ def parse_training_data(path):
 def parse_results(path, whose):
 	with open(results_fpath(path, whose), 'r') as fin:
 		lines = fin.read().splitlines()
-	times = [int(x) for x in lines[0].split()],
+		print(lines[0])
+	times = [int(x) for x in lines[0].split()]
 	eigens = [[float(x) for x in line.split()] for line in lines[1:-1]]
 	results = [int(x) for x in lines[-1].split()]
 	return (
