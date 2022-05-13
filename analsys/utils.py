@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 
 import os
+import itertools as itt
 
 def get_data_path():
 	return '../data'
