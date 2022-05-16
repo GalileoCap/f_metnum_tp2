@@ -9,7 +9,7 @@ struct KNN {
 
   void fit(const RMatrix&, const RMatrix&);
   Vector predict(const RMatrix&) const;
-  uint predict_one(Vector) const; //TODO: Pass-by-copy because of Eigen's shenanigans
+  uint predict_one(const Eigen::Ref<const Vector>&) const;
 
   struct SortedDistances {
     SortedDistances(uint);

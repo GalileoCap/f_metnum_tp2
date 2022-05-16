@@ -9,13 +9,14 @@ void KNN::fit(const RMatrix& X, const RMatrix& Y) {
 Vector KNN::predict(const RMatrix& X) const {
   Vector res(X.rows());
 
-  for (uint i = 0; i < X.rows(); i++) //A: Guess for each vector
-    res(i) = predict_one(X.row(i));
+  uint i = 0;
+  for (const auto& x : X.rowwise()) //A: Guess for each vector
+    res(i) = predict_one(x);
 
   return res;
 }
 
-uint KNN::predict_one(Vector x) const { 
+uint KNN::predict_one(const Eigen::Ref<const Vector>& x) const { 
   SortedDistances neighbors(_k);
 
   for (uint i = 0; i < _X.rows(); i++)
