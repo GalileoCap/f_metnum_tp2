@@ -18,7 +18,7 @@ class System:
 		if self.usePCA and not skipPCA:
 			start = time.process_time()
 
-			self.pca = tp2.PCA(params['n'], params['maxIters']) if self.whose == 'mine' else sklearn.decomposition.PCA(params['n']) #TODO: sklearn maxIters
+			self.pca = tp2.PCA(params['n'], params['maxIters']) if self.whose == 'mine' else sklearn.decomposition.PCA(params['n'], iterated_power = params['maxIters'])
 			self.pca.fit(X_train)
 
 			self.pcaTime = time.process_time() - start
