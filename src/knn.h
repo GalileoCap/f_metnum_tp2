@@ -8,8 +8,8 @@ struct KNN {
   KNN(uint);
 
   void fit(const RMatrix&, const RMatrix&);
-  Vector guess(const RMatrix&) const;
-  uint guess_one(Vector) const; //TODO: Pass-by-copy because of Eigen's shenanigans
+  Vector predict(const RMatrix&) const;
+  uint predict_one(Vector) const; //TODO: Pass-by-copy because of Eigen's shenanigans
 
   struct SortedDistances {
     SortedDistances(uint);

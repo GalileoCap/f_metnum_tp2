@@ -6,21 +6,20 @@ void KNN::fit(const RMatrix& X, const RMatrix& Y) {
   _X = X; _Y = Y;
 };
 
-Vector KNN::guess(const RMatrix& X) const {
+Vector KNN::predict(const RMatrix& X) const {
   Vector res(X.rows());
 
   for (uint i = 0; i < X.rows(); i++) //A: Guess for each vector
-    res(i) = guess_one(X.row(i));
+    res(i) = predict_one(X.row(i));
 
   return res;
 }
 
-uint KNN::guess_one(Vector x) const { 
+uint KNN::predict_one(Vector x) const { 
   SortedDistances neighbors(_k);
 
-  for (uint i = 0; i < _X.rows(); i++) {
+  for (uint i = 0; i < _X.rows(); i++)
     neighbors.emplace_back(_Y(i), (x.transpose() - _X.row(i)).norm());
-  }
 
   return neighbors.majority();
 }

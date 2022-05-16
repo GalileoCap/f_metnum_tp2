@@ -2,7 +2,7 @@
 
 #include <Eigen/Core>
 
-#include <stdexcept>
+#include <cmath>
 #include <iostream>
 
 typedef unsigned int uint;

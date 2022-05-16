@@ -16,6 +16,6 @@ PYBIND11_MODULE(tp2, m) {
   py::class_<KNN>(m, "KNN")
     .def(py::init<uint>())
     .def("fit", &KNN::fit, py::arg("X"), py::arg("Y"))
-    .def("guess", &KNN::guess, py::arg("X"));
+    .def("predict", &KNN::predict, py::arg("X"));
 }
 
