@@ -6,37 +6,31 @@
 * Juan Pablo Anachure, 99/16, janachure@gmail.com
 * Octavio La Tessa, 477/16, octalate@hotmail.com
 
-## Info
+## Compilar
 
-### Compilar
-
-Para compilar se pueden correr los siguientes comandos
+Se necesitan las siguientes librerías: `python3.6+`, `c++11/14/17` 
+Para compilar se pueden correr los siguientes comandos:
 ~~~
 git submodule update --init
 make
 ~~~
 
+El programa compilado genera un archivo que puede ser importado desde python, en el archivo `analysis/example.py` se puede ver un ejemplo de cómo usarlo.
+
+## Correr tests
+
+~~~
+WIP
+~~~
+
+## Correr analysis
+
+Todos los experimentos tienen como parámetro principal `name`, que es el nombre del dataset en el directorio `data` sobre el que se va a trabajar. Luego también tienen parámetros específicos para cada experimento, esos están explicados en sus respectivos scripts.
+
 ### Preparar datos
 
-El programa tiene dos archivos de entrada y uno de salida:
-* El primero de entrada son los datos de entrenamiento, un csv con la primera columna siendo eel label y el resto siendo los pixeles 
-* El segundo de entrada son los datos para adivinar, tiene el mismo formato que el de entrenamiento
-* El de salida es un archivo con dos lineas, una de los tiempos que tomó calcular pca (si aplica) y adivinar cada vector de prueba
+El dataset tiene que ser un archivo `csv` con una columna titulada `label` de cualquier tipo enumerable y el resto de columnas que tienen que ser números. Se puede usar el script `analysis/prepare.py` para usar cualquier csv.
 
-### Corriendo el programa
+### Resultados
 
-El programa tiene tres parámetros obligatorios y otros tres opcionales:
-* Path al archivo de entrenamiento [OBLIGATORIO]
-* Path al archivo de test [OBLIGATORIO]
-* Path al archivo de salida [OBLIGATORIO]
-* Cantidad de vecinos cercanos que revisar
-* Cantidad de autovectores para calcular en el PCA
-* Cantidad de iteraciones para calcular autovectores en el PCA
-Para usar PCA hay que pasar la cantidad de autovectores para calcular  
-
-Ejemplo:
-~~~
-./tp2 ./data/kaggle/train.csv ./data/kaggle/test.csv ./data/kaggle/results.csv -k 50 -n 100 -i 1000 
-~~~
-
-#TODO:
+Los resultados son guardados dentro del directorio `data/DATASET/EXPERIMENTO`
