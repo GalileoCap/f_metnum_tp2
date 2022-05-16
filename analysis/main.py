@@ -1,4 +1,4 @@
-from system import Systems
+from system import System
 
 import numpy as np
 
@@ -12,9 +12,12 @@ if __name__ == '__main__':
 	X_train, Y_train = X[:, :-1], X[:, -1]
 	X_test, Y_test = X_train, Y_train
 
-	params = (1, 2, 1000000)
+	params = {
+		'dataSz': len(X_train) + len(X_test), 'frac': 0.5,
+		'maxIters': pow(10, 6), 'n': 4, 'k': 3
+	}
 
-	sys = Systems()
+	sys = System('mine')
 	sys.fit(params, X_train, Y_train)
 	sys.predict(X_test)
 	print(sys.scores(Y_test))
