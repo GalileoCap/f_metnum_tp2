@@ -14,9 +14,6 @@ class System:
 		#TODO: Check correct size
 		self.params = params
 
-		X_train -= np.zeros(X_train.shape, float)
-		Y_train -= np.zeros(Y_train.shape, float)
-
 		self.usePCA = (params['n'] > 0) or skipPCA #TODO: Repetitive redundancy
 		if self.usePCA and not skipPCA:
 			start = time.process_time()
@@ -84,8 +81,8 @@ class Systems:
 
 		self.X_train = train.drop('label', axis = 1).to_numpy().astype(float) #A: Split into vectors and labels
 		self.X_test = test.drop('label', axis = 1).to_numpy().astype(float)
-		self.Y_train = train['label'].to_numpy().astype(float)
-		self.Y_test = test['label'].to_numpy().astype(float)
+		self.Y_train = train['label'].to_numpy().astype(np.uint64)
+		self.Y_test = test['label'].to_numpy().astype(np.uint64)
 
 	def fit(self, *, skipPCA = False):
 		for sys in self.systems:

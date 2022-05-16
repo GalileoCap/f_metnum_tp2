@@ -6,12 +6,12 @@ struct PCA {
 
   PCA(uint, uint);
 
-  void fit(const RMatrix&);
-  Matrix transform(const RMatrix&);
+  void fit(const Ref<Matrix>&);
+  Matrix transform(const Ref<Matrix>&);
 
-  EigenPair _power_iter(const RMatrix&);
+  EigenPair _power_iter(const Ref<Matrix>&);
   Matrix _to_covariance(Matrix);
-  void _deflate(RMatrix, const EigenPair&); //A: Removes the component v from M
+  void _deflate(Ref<Matrix>, const EigenPair&); //A: Removes the component v from M
 
   Matrix _M; Vector _avg;
   uint _n, _max_iter, _size;

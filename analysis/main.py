@@ -9,7 +9,7 @@ if __name__ == '__main__':
 		[1., 0., 2],
 		[1., 1., 3]
 	])
-	X_train, Y_train = X[:, :-1], X[:, -1]
+	X_train, Y_train = X[:, :-1], X[:, -1].astype(np.uint64)
 	X_test, Y_test = X_train, Y_train
 
 	params = {

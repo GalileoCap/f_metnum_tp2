@@ -7,22 +7,22 @@
 struct KNN {
   KNN(uint);
 
-  void fit(const RMatrix&, const RMatrix&);
-  Vector predict(const RMatrix&) const;
-  uint predict_one(const Eigen::Ref<const Vector>&) const;
+  void fit(const Ref<Matrix>&, const Ref<Labels>&);
+  Labels predict(const Ref<Matrix>&) const;
+  Label predict_one(const Ref<const Vector>&) const;
 
   struct SortedDistances {
     SortedDistances(uint);
 
-    void emplace_back(uint, floating_t);
-    uint majority() const;
+    void emplace_back(Label, floating_t);
+    Label majority() const;
 
     uint _k;
-    std::vector<std::pair<uint, floating_t>> _v;
+    std::vector<std::pair<Label, floating_t>> _v;
   };
 
-  uint _k;
-  Matrix _X, _Y;
+  Label _k;
+  Matrix _X; Labels _Y;
 };
 
 #include "knn.cpp"
