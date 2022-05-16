@@ -4,12 +4,17 @@
 
 * F. Galileo Cappella Lewi, 653/20, galileocapp@gmail.com
 * Juan Pablo Anachure, 99/16, janachure@gmail.com
+* Octavio La Tessa, 477/16, octalate@hotmail.com
 
 ## Info
 
 ### Compilar
 
-Para compilar primero hay que descomprimir `./src/eigen.tar.gz` en el mismo directorio y corriendo el script `compilar.sh` o el comando `g++ -I ./src/eigen ./src/main.cc -o tp2`
+Para compilar se pueden correr los siguientes comandos
+~~~
+git submodule update --init
+make
+~~~
 
 ### Preparar datos
 
@@ -34,3 +39,4 @@ Ejemplo:
 ./tp2 ./data/kaggle/train.csv ./data/kaggle/test.csv ./data/kaggle/results.csv -k 50 -n 100 -i 1000 
 ~~~
 
+#TODO:

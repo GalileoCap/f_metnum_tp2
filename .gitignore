@@ -1,5 +1,7 @@
-/src/eigen/*
 /data/*
 !/data/*.csv.gz
-.*.swp
+
+*.so
+
 .venv
+.*.swp
