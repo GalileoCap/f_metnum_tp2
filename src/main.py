@@ -27,12 +27,21 @@ def eig(A, num=2, niter=10000, eps=1e-6):
 	return eigenvalues, eigenvectors
 
 if __name__ == '__main__':
-	X = np.random.rand(2, 2) * 10
+	# X = np.random.rand(2, 2) * 10
+	X = np.array([
+		[0., 0., 0],
+		[0., 1., 1],
+		[1., 0., 2],
+		[1., 1., 3]
+	])
+	X, Y = X[:, :-1], X[:, -1]
 	X -= np.mean(X, axis = 0)
 	M = np.dot(X.T, X) / X.shape[0]
-	print(f'X: {X}\nM: {M}')
+	print(f'X: {X}\nY: {Y} \nM: {M}')
 
-	PCA = tp2.PCA(1, 10000000); PCA.fit(M)
-	# pca = sklearn.decomposition.PCA(2); pca.fit(M)
-	# print(PCA.components_, eig(M, 2, 1000000)[1], pca.components_, sep = '\n')
-	print(X, PCA.transform(X), sep = '\n')
+	PCA = tp2.PCA(X.shape[1], 10000000); PCA.fit(M)
+	X = PCA.transform(X)
+
+	KNN = tp2.KNN(1); KNN.fit(X, Y)
+	res = KNN.guess(X)
+	print(res, sep = '\n')
