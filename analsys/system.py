@@ -1,77 +1,99 @@
-import subprocess
+import tp2
+import sklearn.decomposition
+import sklearn.neighbors
 
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.decomposition import PCA
-
+import time
 import metrics
 from utils import *
 
-class MySystem:
-	def __init__(self, params, path):
-		print(f'MySystem RUN params {params}, path {path}')
-		k, usePCA, n, niters = params
-		args = [
-			train_fpath(path),
-			test_fpath(path),
-			results_fpath(path, 'mine'),
-			f'-k {k}',
-		] + ([f'-n {n}', f'-i {niters}'] if usePCA else [])
-		subprocess.run(f'../tp2 {" ".join(args)}', shell = True, capture_output = True) #TODO: Check if error
-		self.results = parse_results(path, 'mine') 
+class System:
+	def __init__(self, whose):
+		self.whose = whose
+	
+	def fit(self, params, X_train, Y_train, *, skipPCA = False):
+		#TODO: Check correct size
+		self.params = params
 
-		X_train, X_test, _, true_results = parse_training_data(path)
-		self.metrics = metrics.scores(true_results, self.results)
-		self.metrics.update(metrics.time(self.results, usePCA))
-		self.metrics.update({
-			'whose': 'mine',
-			'k': k, 'n': n, 'niters': niters,
-			'trainSz': len(X_train), 'testSz': len(X_test),
-		})
+		X_train -= np.zeros(X_train.shape, float)
+		Y_train -= np.zeros(Y_train.shape, float)
 
-class SkSystem:
-	def __init__(self, params, path):
-		print(f'SkSystem RUN params {params}, path {path}')
-		k, self.usePCA, n, niters = params
-		self.path = path
+		self.usePCA = (params['n'] > 0) or skipPCA #TODO: Repetitive redundancy
+		if self.usePCA and not skipPCA:
+			start = time.process_time()
 
-		X_train, X_test, Y_train, true_results = parse_training_data(path)
-		self.X_train = X_train.to_numpy()
-		self.X_test = X_test.to_numpy()
-		self.Y_train = Y_train
+			self.pca = tp2.PCA(params['n'], params['maxIters']) if self.whose == 'mine' else sklearn.decomposition.PCA(params['n']) #TODO: sklearn maxIters
+			self.pca.fit(X_train)
+
+			self.pcaTime = time.process_time() - start
+	
+		if self.usePCA or skipPCA: X_train = self.pca.transform(X_train)
+		self.knn = tp2.KNN(params['k']) if self.whose == 'mine' else sklearn.neighbors.KNeighborsClassifier(params['k'])
+		self.knn.fit(X_train, Y_train)
+
+	def predict(self, X_test):
+		#TODO: Check correct size
+		start = time.process_time()
 
 		if self.usePCA:
-			self.calc_pca(n)
-		self.guess(k)
-		self.save_results()
-		self.results = parse_results(path, 'sklearn') #TODO: We already have results, but I want to make sure they're the correct type
+			X_test = self.pca.transform(X_test)
+		self.predicted = self.knn.predict(X_test)
 
-		self.metrics = metrics.scores(true_results, self.results)
-		self.metrics.update(metrics.time(self.results, self.usePCA))
-		self.metrics.update({
-			'whose': 'sklearn',
-			'k': k, 'n': n, 'niters': niters,
-			'trainSz': len(X_train), 'testSz': len(X_test),
+		self.predictTime = time.process_time() - start
+
+	def scores(self, Y_test):
+		#TODO: Check correct size
+		scores = metrics.scores(Y_test, self.predicted)
+		scores.update(self.params)
+		scores.update({
+			'whose': self.whose,
+			'pcaTime': self.pcaTime if self.usePCA else np.nan,
+			'predictTime': self.predictTime,
 		})
+		return scores
 
-	def calc_pca(self, n): #U: Calculates the pca transform and transforms the training data to use it #TODO: niters?
-		self.pca = PCA(n)
-		self.pca.fit(self.X_train)
-		self.X_train = self.pca.transform(self.X_train)
-		self.X_test = self.pca.transform(self.X_test)
+class Systems:
+	def __init__(self, df):
+		self.systems = [System(whose) for whose in ['mine', 'sklearn']]
+		self.df = df
+		self.params = dict() #A: Dflt
+	
+	def run(self, params): #U: Runs the system with some specific params 
+		#S: Checks which params changed
+		newDataSz = self.params.get('dataSz') != params['dataSz']
+		newFrac = self.params.get('frac') != params['frac']
+		newMaxIters = self.params.get('maxIters') != params['maxIters']
+		newN = self.params.get('n') != params['n']
+		newK = self.params.get('k') != params['k']
+		self.params = params #A: Save the new params
+	
+		if newDataSz or newFrac: self.splitData() #A: If the size changed, we need to re-split the data
+		self.fit(
+			skipPCA = (params['n'] > 0) and (not (newDataSz or newFrac or newMaxIters or newN)) #A: We're using PCA but we don't need to train it 
+		)
+		self.predict()
+		return self.scores()
 
-	def guess(self, k):
-		clf = KNeighborsClassifier(k)
-		clf.fit(self.X_train, self.Y_train)
-		self.results = clf.predict(self.X_test)
+	def splitData(self): #U: Gets a subset of df and splits it in training and testing data
+		df = self.df.drop(np.random.choice( #A: Choose dataSz rows at random
+			self.df.index,
+			len(self.df) - self.params['dataSz'],
+			replace = False
+		))
+		train = df.sample(frac = self.params['frac']) #A: Split train and test 
+		test = df.drop(train.index)
 
-	def save_results(self):
-		with open(results_fpath(self.path, 'sklearn'), 'w') as fout:
-			fout.write('0 0\n') #NOTE: Ignore this line
-			if self.usePCA:
-				fout.write('\n'.join([
-					' '.join([str(x) for x in eigenvector])
-					for eigenvector in self.pca.components_
-				])) #A: n lines of PCA's eigenvectors
-			fout.write('\n') 
-			fout.write(' '.join([str(x) for x in self.results])) #A: Line of results
+		self.X_train = train.drop('label', axis = 1).to_numpy().astype(float) #A: Split into vectors and labels
+		self.X_test = test.drop('label', axis = 1).to_numpy().astype(float)
+		self.Y_train = train['label'].to_numpy().astype(float)
+		self.Y_test = test['label'].to_numpy().astype(float)
 
+	def fit(self, *, skipPCA = False):
+		for sys in self.systems:
+			sys.fit(self.params, self.X_train, self.Y_train, skipPCA = skipPCA)
+
+	def predict(self):
+		for sys in self.systems:
+			sys.predict(self.X_test)
+
+	def scores(self):
+		return [sys.scores(self.Y_test) for sys in self.systems]
