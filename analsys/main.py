@@ -1,23 +1,20 @@
-from system import SkSystem
-import plot
-import metrics
-from utils import *
+from system import Systems
 
-def compare(params, pct, fpath, replace):
-	if replace:
-		split_data(pct, fpath)
-		run(params, fpath) #A: Run c++ code
-		SkSystem(params, fpath) #A: Run sklearn code
-
-	_, _, _, true_results = parse_training_data(fpath)
-	results = {
-		'mine': parse_results(results_mine_fpath(fpath)),
-		'sklearn': parse_results(results_sklearn_fpath(fpath)),
-	}
-	scores = metrics.scores(true_results, results)
-	plot.eigens(results, fpath)
-
-	print(scores)
+import numpy as np
 
 if __name__ == '__main__':
-	compare((50, True, 12, 1000), 0.4, '../data/kaggle/small', True)
+	X = np.array([
+		[0., 0., 0],
+		[0., 1., 1],
+		[1., 0., 2],
+		[1., 1., 3]
+	])
+	X_train, Y_train = X[:, :-1], X[:, -1]
+	X_test, Y_test = X_train, Y_train
+
+	params = (1, 2, 1000000)
+
+	sys = Systems()
+	sys.fit(params, X_train, Y_train)
+	sys.predict(X_test)
+	print(sys.scores(Y_test))
