@@ -1,4 +1,5 @@
 #include "knn.h"
+#include <iostream>
 
 KNN::KNN(uint k) : _k(k) {}
 
@@ -11,7 +12,7 @@ Labels KNN::predict(const Ref<Matrix>& X) const {
 
   uint i = 0;
   for (const auto& x : X.rowwise()) //A: Guess for each vector
-    res(i) = predict_one(x);
+    res(i++) = predict_one(x);
 
   return res;
 }
