@@ -58,14 +58,15 @@ class Systems:
 		#S: Checks which params changed
 		newDataSz = self.params.get('dataSz') != params['dataSz']
 		newFrac = self.params.get('frac') != params['frac']
+		newThreshold = self.params.get('threshold') != params['threshold']
 		newMaxIters = self.params.get('maxIters') != params['maxIters']
 		newN = self.params.get('n') != params['n']
 		newK = self.params.get('k') != params['k']
 		self.params = params #A: Save the new params
 	
-		if newDataSz or newFrac: self.splitData() #A: If the size changed, we need to re-split the data
+		if newDataSz or newFrac or newThreshold: self.splitData() #A: If the size changed, we need to re-split the data
 		self.fit(
-			skipPCA = (params['n'] > 0) and (not (newDataSz or newFrac or newMaxIters or newN)) #A: We're using PCA but we don't need to train it 
+			skipPCA = (params['n'] > 0) and (not (newDataSz or newFrac or newThreshold or newMaxIters or newN)) #A: We're using PCA but we don't need to train it 
 		)
 		self.predict()
 		return self.scores()
@@ -83,6 +84,9 @@ class Systems:
 		self.X_test = test.drop('label', axis = 1).to_numpy().astype(float)
 		self.Y_train = train['label'].to_numpy().astype(np.uint64)
 		self.Y_test = test['label'].to_numpy().astype(np.uint64)
+
+		self.X_train[self.X_train < self.params['threshold']] = 0 #A: Apply the threshold
+		self.X_test[self.X_test < self.params['threshold']] = 0 #TODO: What happens if we don't do it? 
 
 	def fit(self, *, skipPCA = False):
 		for sys in self.systems:

@@ -26,9 +26,16 @@ class ExpRanges:
 			lastRange = len(df) / 2 #NOTE: /2 because we're adding two rows per iteration #TODO: Get it from systems
 			print(f'ExpRange RUN continuing from {lastRange}')
 		for params in ( #A: For every combination of ranges
-				{'dataSz': dataSz, 'frac': frac, 'maxIters': maxIters, 'n': n, 'k': k}
-			for i, (dataSz, frac, maxIters, n, k) in enumerate(itt.product(self.ranges['dataSz'], self.ranges['frac'], self.ranges['maxIters'], self.ranges['n'], self.ranges['k']))
-			if (
+				{
+					'dataSz': dataSz, 'frac': frac, 'threshold': threshold,
+					'maxIters': maxIters, 'n': n,
+					'k': k
+				}
+			for i, (dataSz, frac, threshold, maxIters, n, k) in enumerate(itt.product(
+				self.ranges['dataSz'], self.ranges['frac'], self.ranges['threshold'],
+				self.ranges['maxIters'], self.ranges['n'],
+				self.ranges['k'])
+			) if (
 				(i >= lastRange) and #A: Skip combinations already present in df 
 				(n <= min(dataSz * frac, 784)) #SEE: https://stackoverflow.com/a/51041152
 			)
@@ -48,9 +55,9 @@ class ExpRanges:
 
 	def plot(self):
 		print('ExpRanges PLOT')
-		df = self.df[(self.df['whose'] == 'mine') & (self.df['k'] >= 5)]
+		df = self.df[(self.df['whose'] == 'mine')]
 		print(self.df.max())
-		for score in (col for col in df.columns if not col in ['k', 'n', 'whose', 'confusionMatrix', 'dataSz', 'testSz', 'maxIters', 'frac']):
+		for score in (col for col in df.columns if not col in ['k', 'n', 'whose', 'confusionMatrix', 'dataSz', 'testSz', 'maxIters', 'frac', 'threshold']):
 			fig = go.Figure(data = go.Heatmap(
 				x = df['k'],
 				y = df['n'],
@@ -68,6 +75,6 @@ if __name__ == '__main__':
 	name = 'kaggle'
 	ExpRanges(
 		name,
-		{'k': list(range(1, 5)) + list(range(5, 51, 5)), 'n': range(0, 784 + 1), 'dataSz': range(1000, 42001, 1000), 'maxIters': list(range(0, 10)) + [pow(10, i) for i in range(1, 7)], 'frac': np.arange(0.1, 1, 0.1)},
+		{'k': list(range(1, 5)) + list(range(5, 51, 5)), 'n': range(0, 784 + 1), 'dataSz': range(1000, 42001, 1000), 'maxIters': list(range(0, 10)) + [pow(10, i) for i in range(1, 7)], 'frac': np.arange(0.1, 1, 0.1), 'threshold': [0, 64, 128, 192, 256]},
 		# {'k': range(10, 51, 20), 'n': range(0, 6), 'dataSz': [5000], 'maxIters': [1000000], 'frac': [0.4]},
 	)
