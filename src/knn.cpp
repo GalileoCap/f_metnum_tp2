@@ -1,5 +1,4 @@
 #include "knn.h"
-#include <iostream>
 
 KNN::KNN(uint k) : _k(k) {}
 
@@ -29,20 +28,14 @@ Label KNN::predict_one(const Ref<const Vector>& x) const {
 KNN::SortedDistances::SortedDistances(uint k) : _k(k) {};
 
 void KNN::SortedDistances::emplace_back(Label y, floating_t d) {
-  uint i = 0; while (i < _v.size() && _v[i].second < d) i++;
-  std::pair<Label, floating_t> prev(y, d), tmp; 
-  for (uint j = i; j < _v.size(); j++) { //A: Swap from i until the end to keep it sorted
-    tmp = prev;
-    prev = _v[j];
-    _v[j] = tmp;
-  }
-  if (_v.size() < _k) _v.push_back(prev);
+  _v.push(LabelDist (y, d));
 }
 
-Label KNN::SortedDistances::majority() const {
+Label KNN::SortedDistances::majority() {
+  //TODO: Check _size >= k
   std::map<Label, uint> counts;
-  for (const std::pair<Label, floating_t> kv : _v) {
-    Label label = kv.first;
+  for (uint i = 0; i < _k; i++) {
+    Label label = _v.top().first; _v.pop();
     if (counts.count(label)) counts[label]++;
     else counts[label] = 1;
   }
@@ -53,3 +46,7 @@ Label KNN::SortedDistances::majority() const {
 
   return heaviest->first;
 }
+
+bool KNN::SortedDistances::Comp::operator()(const LabelDist& left, const LabelDist& right) {
+  return left.second > right.second;
+};
