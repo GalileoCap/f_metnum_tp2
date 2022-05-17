@@ -76,23 +76,23 @@ if __name__ == '__main__':
 	dataset = 'kaggle'
 	ExpRanges(
 		dataset, 'small',
-		{
+		ranges = {
 			'dataSz': range(10000, 42001, 10000),
 			'frac': [0.1, 0.5, 0.9],
 			'threshold': [0, 128, 256],
 			'maxIters': [np.nan],
-			'n': range(0, 784 + 1, 5),
+			'n': [-1] + list(range(0, 784 + 1, 5)),
 			'k': list(range(1, 10)) + list(range(10, 51, 10)),
 		}
 	)
 	ExpRanges(
 		dataset, 'full',
-		{
+		ranges = {
 			'dataSz': range(1000, 42001, 1000),
 			'frac': np.arange(0.1, 1, 0.1),
 			'threshold': [0, 64, 128, 192, 256],
 			'maxIters': list(range(0, 10)) + [1000, np.nan],
-			'n': range(0, 784 + 1),
+			'n': [-1] + list(range(0, 784 + 1, 5)),
 			'k': list(range(1, 5)) + list(range(5, 51, 5)),
 		}
 	)

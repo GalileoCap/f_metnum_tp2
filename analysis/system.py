@@ -12,17 +12,18 @@ class System:
 	
 	def fit(self, params, X_train, Y_train, *, skipPCA = False):
 		#TODO: Check correct size
-		maxIters = params['maxIters']
+		maxIters, n_components = params['maxIters'], params['n']
 		if np.isnan(maxIters):
 			maxIters = 1000000 if self.whose == 'mine' else 'auto'
+		if n_components == 0 and self.whose == 'sklearn': n_components = None
 		self.params = params
 
-		self.usePCA = (params['n'] > 0) or skipPCA #TODO: Repetitive redundancy
+		self.usePCA = (params['n'] >= 0) or skipPCA #TODO: Repetitive redundancy
 		if self.usePCA and not skipPCA:
 			start = time.process_time()
 
-			self.pca = tp2.PCA(params['n'], maxIters) if self.whose == 'mine' else sklearn.decomposition.PCA(params['n'], iterated_power = maxIters) 
-			self.pca.fit(X_train)
+			self.pca = tp2.PCA(n_components, maxIters) if self.whose == 'mine' else sklearn.decomposition.PCA(n_components, iterated_power = maxIters) 
+			print(self.whose, self.pca.fit(X_train))
 
 			self.pcaTime = time.process_time() - start
 	
@@ -93,7 +94,9 @@ class Systems:
 
 	def fit(self, *, skipPCA = False):
 		for sys in self.systems:
+			print('Systems fit', sys.whose)
 			sys.fit(self.params, self.X_train, self.Y_train, skipPCA = skipPCA)
+			print('Systems fit DONE')
 
 	def predict(self):
 		for sys in self.systems:

@@ -6,9 +6,10 @@ struct PCA {
 
   PCA(uint, uint);
 
-  void fit(const Ref<Matrix>&);
+  uint fit(const Ref<Matrix>&);
   Matrix transform(const Ref<Matrix>&);
 
+  bool stopFit(uint, uint, uint, floating_t, floating_t);
   EigenPair _power_iter(const Ref<Matrix>&);
   Matrix _to_covariance(Matrix);
   void _deflate(Ref<Matrix>, const EigenPair&); //A: Removes the component v from M

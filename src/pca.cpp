@@ -1,18 +1,33 @@
 #pragma once
-#include <iostream>
 #include "pca.h"
 
 PCA::PCA(uint n, uint max_iter) : _n(n), _max_iter(max_iter), _size(0) {};
 
-void PCA::fit(const Ref<Matrix>& X) { 
+bool PCA::stopFit(uint i, uint rows, uint cols, floating_t lambda_prev, floating_t lambda) {
+  if (_n == 0) { //A: Choose automatically 
+    uint eigenvalues = rows <= cols ? rows : cols; //A: The covariance matrix has up to min(rows, cols) eigenvalues
+    return (i == eigenvalues) || //A: There's no more eigenvalues to calc
+          (lambda * (eigenvalues - i) < lambda_prev); //A: The next eigenvalues don't add up to the previous one
+  } else return (i == _n);
+}
+
+uint PCA::fit(const Ref<Matrix>& X) { 
   //TODO: Warn if wrong dimensions for the chosen n
   Matrix M = _to_covariance(X);
-  _M = Matrix(_n, M.cols());
-  for (uint i = 0; i < _n; i++) { //A: Iterate for each component
+  std::list<Vector> eigenvectors; floating_t lambda_prev = 0, lambda = 0;
+  uint i = 0;
+  do { //A: Iterate for each component
+    lambda_prev = lambda;
     EigenPair vl(_power_iter(M)); 
     _deflate(M, vl);
-    _M.row(i) = vl.first; //A: Save this component //TODO: Multiply by lambda?
-  }
+    eigenvectors.push_back(vl.first); //A: Save this component //TODO: Multiply by lambda?
+    lambda = vl.second;
+    i++;
+  } while (!stopFit(i, X.rows(), X.cols(), lambda_prev, lambda));
+  _M = Matrix(i, M.cols());
+  uint j = 0; for (const Ref<Vector>& v : eigenvectors) _M.row(j++) = v;
+
+  return i;
 }
 
 PCA::EigenPair PCA::_power_iter(const Ref<Matrix>& M) {
@@ -39,7 +54,7 @@ void PCA::_deflate(Ref<Matrix> M, const EigenPair& vl) { //U: Removes the compon
 
 Matrix PCA::transform(const Ref<Matrix>& X) { 
   //TODO: Warn if wrong dimensions or if not trained (_size == 0)
-  Matrix res(X.rows(), _n);
+  Matrix res(X.rows(), _M.rows());
 
   uint i = 0;
   for (auto x : X.rowwise()) //A: Transform each vector
