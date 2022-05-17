@@ -4,11 +4,12 @@ from plot import *
 from utils import *
 
 class ExpRanges:
-	def __init__(self, name, ranges): #U: Runs the program with different values for k, a, 
-		print(f'ExpRanges START name {name}, ranges {ranges}')
+	def __init__(self, dataset, name, ranges): #U: Runs the program with different values for k, a, 
+		print(f'ExpRanges START dataset {dataset}, ranges {ranges}')
+		self.dataset = dataset
 		self.name = name
-		self.data_df = pd.read_csv(full_fpath(name))
-		self.path = exp_path(name, 'expRanges')
+		self.data_df = pd.read_csv(full_fpath(dataset))
+		self.path = exp_path(dataset, 'expRanges', name)
 		self.fout_fpath = df_fpath(self.path, 'df') 
 		self.ranges = ranges
 
@@ -72,9 +73,26 @@ class ExpRanges:
 			fig.write_image(img_fpath(f'{self.path}/{score}.heatmap'))
 
 if __name__ == '__main__':
-	name = 'kaggle'
+	dataset = 'kaggle'
 	ExpRanges(
-		name,
-		{'k': list(range(1, 5)) + list(range(5, 51, 5)), 'n': range(0, 784 + 1), 'dataSz': range(1000, 42001, 1000), 'maxIters': list(range(0, 10)) + [pow(10, i) for i in range(1, 7)], 'frac': np.arange(0.1, 1, 0.1), 'threshold': [0, 64, 128, 192, 256]},
-		# {'k': range(10, 51, 20), 'n': range(0, 6), 'dataSz': [5000], 'maxIters': [1000000], 'frac': [0.4]},
+		dataset, 'small',
+		{
+			'dataSz': range(10000, 42001, 10000),
+			'frac': [0.1, 0.5, 0.9],
+			'threshold': [0, 128, 256],
+			'maxIters': [np.nan],
+			'n': range(0, 784 + 1, 5),
+			'k': list(range(1, 10)) + list(range(10, 51, 10)),
+		}
+	)
+	ExpRanges(
+		dataset, 'full',
+		{
+			'dataSz': range(1000, 42001, 1000),
+			'frac': np.arange(0.1, 1, 0.1),
+			'threshold': [0, 64, 128, 192, 256],
+			'maxIters': list(range(0, 10)) + [1000, np.nan],
+			'n': range(0, 784 + 1),
+			'k': list(range(1, 5)) + list(range(5, 51, 5)),
+		}
 	)

@@ -12,13 +12,16 @@ class System:
 	
 	def fit(self, params, X_train, Y_train, *, skipPCA = False):
 		#TODO: Check correct size
+		maxIters = params['maxIters']
+		if np.isnan(maxIters):
+			maxIters = 1000000 if self.whose == 'mine' else 'auto'
 		self.params = params
 
 		self.usePCA = (params['n'] > 0) or skipPCA #TODO: Repetitive redundancy
 		if self.usePCA and not skipPCA:
 			start = time.process_time()
 
-			self.pca = tp2.PCA(params['n'], params['maxIters']) if self.whose == 'mine' else sklearn.decomposition.PCA(params['n'], iterated_power = params['maxIters'])
+			self.pca = tp2.PCA(params['n'], maxIters) if self.whose == 'mine' else sklearn.decomposition.PCA(params['n'], iterated_power = maxIters) 
 			self.pca.fit(X_train)
 
 			self.pcaTime = time.process_time() - start
