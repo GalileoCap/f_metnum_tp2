@@ -12,14 +12,14 @@ def make_data_path(path): #U: Makes sure a path exists
 	os.makedirs(path, exist_ok = True)
 	return path
 
-def exp_path(name, exp): #U: Gets the path to a dataset's experiments
-	return make_data_path(f'{name}/experiments/{exp}')
+def exp_path(dataset, exp, name): #U: Gets the path to a dataset's experiments
+	return make_data_path(f'{dataset}/experiments/{exp}/{name}')
 
 def df_fpath(path, df): #U: Gets the path to a df
 	return f'{make_data_path(path)}/{df}.csv.gz'
 
-def full_fpath(name): #U: Gets the path to the original dataset
-	return f'{get_data_path()}/{name}.csv.gz'
+def full_fpath(dataset): #U: Gets the path to the original dataset
+	return f'{get_data_path()}/{dataset}.csv.gz'
 
 def train_fpath(path): #U: Gets the path to a training dataset
 	return f'{make_data_path(path)}/train.csv'
