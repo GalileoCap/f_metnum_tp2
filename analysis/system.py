@@ -24,6 +24,7 @@ class System:
 
 			self.pca = tp2.PCA(n_components, maxIters) if self.whose == 'mine' else sklearn.decomposition.PCA(n_components, iterated_power = maxIters) 
 			print(self.whose, self.pca.fit(X_train))
+			self.pca.fit(X_train)
 
 			self.pcaTime = time.process_time() - start
 	
