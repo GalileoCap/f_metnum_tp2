@@ -21,15 +21,6 @@ def df_fpath(path, df): #U: Gets the path to a df
 def full_fpath(dataset): #U: Gets the path to the original dataset
 	return f'{get_data_path()}/{dataset}.csv.gz'
 
-def train_fpath(path): #U: Gets the path to a training dataset
-	return f'{make_data_path(path)}/train.csv'
-
-def test_fpath(path): #U: Gets the path to a test dataset
-	return f'{make_data_path(path)}/test.csv'
-
-def results_fpath(path, whose): #U: Gets the path to someone's results
-	return f'{make_data_path(path)}/{whose}.results'
-
 def img_fpath(fpath): #U: Adds the correct image extension
 	return f'{fpath}.png'
 

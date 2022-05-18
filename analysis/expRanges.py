@@ -1,6 +1,6 @@
 from system import Systems
 
-from plot import *
+import plot 
 from utils import *
 
 class ExpRanges:
@@ -10,7 +10,7 @@ class ExpRanges:
 		self.name = name
 		self.data_df = pd.read_csv(full_fpath(dataset))
 		self.path = exp_path(dataset, 'expRanges', name)
-		self.fout_fpath = df_fpath(self.path, 'df') 
+		self.fout_fpath = df_fpath(self.path, 'df') #TODO: ../data/../data
 		self.ranges = ranges
 
 		self.run()
@@ -50,27 +50,24 @@ class ExpRanges:
 		#TODO: Can this be optimized?
 
 	def read(self):
-		self.df = pd.read_csv(self.fout_fpath) #A: Read from the full df #TODO: confusion_matrix not read correctly #TODO: Check if read correct file
+		self.df = pd.read_csv(self.fout_fpath) #A: Read from the full df #TODO: confusion_matrix not read correctly 
 		self.df['predictTime'] = np.log10(self.df['predictTime']) + 3
 		self.df['pcaTime'] = np.log10(self.df['pcaTime']) + 3
 
 	def plot(self):
 		print('ExpRanges PLOT')
-		df = self.df[(self.df['whose'] == 'mine')]
-		print(self.df.max())
-		for score in (col for col in df.columns if not col in ['k', 'n', 'whose', 'confusionMatrix', 'dataSz', 'testSz', 'maxIters', 'frac', 'threshold']):
-			fig = go.Figure(data = go.Heatmap(
-				x = df['k'],
-				y = df['n'],
-				z = df[score],
-				colorbar = dict(title = score),
-			))
-			fig.update_layout(
-				# title = f'Relación entre el tiempo resolver y el tiempo para calcular LU ({reps} reps)',
-				xaxis_title = 'k',
-				yaxis_title = 'n',
-			)
-			fig.write_image(img_fpath(f'{self.path}/{score}.heatmap'))
+		df = self.df[
+			(self.df['threshold'] == 0) &
+			(self.df['dataSz'] == 20000)
+		]
+		paramCols = ['k', 'n', 'whose', 'dataSz', 'maxIters', 'frac', 'threshold']
+		skipCols = ['confusionMatrix']
+		for col in df.columns: 
+			if (col in paramCols) or (col in skipCols): continue
+			for x, y in [('k', 'n')]:
+				plot.heatmap(df, 'k', 'n', col, self.path)
+			# for x in ['k', 'n']:
+				# plot.scatter(df, x, col, self.path)
 
 if __name__ == '__main__':
 	dataset = 'kaggle'
@@ -79,9 +76,9 @@ if __name__ == '__main__':
 		ranges = {
 			'dataSz': range(10000, 42001, 10000),
 			'frac': [0.1, 0.5, 0.9],
-			'threshold': [0, 128, 256],
+			'threshold': [0],
 			'maxIters': [np.nan],
-			'n': [-1] + list(range(0, 784 + 1, 5)),
+			'n': [-1] + list(range(0, 50, 5)),
 			'k': list(range(1, 10)) + list(range(10, 51, 10)),
 		}
 	)
@@ -90,7 +87,7 @@ if __name__ == '__main__':
 		ranges = {
 			'dataSz': range(1000, 42001, 1000),
 			'frac': np.arange(0.1, 1, 0.1),
-			'threshold': [0, 64, 128, 192, 256],
+			'threshold': [0],
 			'maxIters': list(range(0, 10)) + [1000, np.nan],
 			'n': [-1] + list(range(0, 784 + 1, 5)),
 			'k': list(range(1, 5)) + list(range(5, 51, 5)),
