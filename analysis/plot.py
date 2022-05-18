@@ -64,3 +64,4 @@ def scatter(df, x, col, path): #TODO: Figure out
 		yaxis_title = col,
 	)
 	fig.write_image(img_fpath(f'{path}/scatter.{x}.{col}'))
+

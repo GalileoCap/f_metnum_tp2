@@ -11,24 +11,28 @@ class System:
 		self.whose = whose
 	
 	def fit(self, params, X_train, Y_train, *, skipPCA = False):
+		print(f'{self.whose} FIT') 
 		#TODO: Check correct size
 		maxIters, n_components = params['maxIters'], params['n']
 		if np.isnan(maxIters):
 			maxIters = 1000000 if self.whose == 'mine' else 'auto'
 		if n_components == 0 and self.whose == 'sklearn': n_components = None
 		self.params = params
+		self.trueN = params['n']
 
 		self.usePCA = (params['n'] >= 0) or skipPCA #TODO: Repetitive redundancy
 		if self.usePCA and not skipPCA:
+			print(f'{self.whose} FIT pca') 
 			start = time.process_time()
 
 			self.pca = tp2.PCA(n_components, maxIters) if self.whose == 'mine' else sklearn.decomposition.PCA(n_components, iterated_power = maxIters) 
-			print(self.whose, self.pca.fit(X_train))
+			self.trueN = self.pca.fit(X_train)
 			self.pca.fit(X_train)
 
 			self.pcaTime = time.process_time() - start
-	
 		if self.usePCA or skipPCA: X_train = self.pca.transform(X_train)
+
+		print(f'{self.whose} FIT knn') 
 		self.knn = tp2.KNN(params['k']) if self.whose == 'mine' else sklearn.neighbors.KNeighborsClassifier(params['k'])
 		self.knn.fit(X_train, Y_train)
 
@@ -37,7 +41,10 @@ class System:
 		start = time.process_time()
 
 		if self.usePCA:
+			print(f'{self.whose} PREDICT pca') 
 			X_test = self.pca.transform(X_test)
+
+		print(f'{self.whose} PREDICT knn') 
 		self.predicted = self.knn.predict(X_test)
 
 		self.predictTime = time.process_time() - start
@@ -50,6 +57,7 @@ class System:
 			'whose': self.whose,
 			'pcaTime': self.pcaTime if self.usePCA else np.nan,
 			'predictTime': self.predictTime,
+			'trueN': self.trueN,
 		})
 		return scores
 
@@ -95,9 +103,7 @@ class Systems:
 
 	def fit(self, *, skipPCA = False):
 		for sys in self.systems:
-			print('Systems fit', sys.whose)
 			sys.fit(self.params, self.X_train, self.Y_train, skipPCA = skipPCA)
-			print('Systems fit DONE')
 
 	def predict(self):
 		for sys in self.systems:
