@@ -13,7 +13,7 @@ struct KNN {
 
   void fit(const Ref<Matrix>&, const Ref<Labels>&);
   Labels predict(const Ref<Matrix>&) const;
-  Label predict_one(const Ref<const Vector>&) const;
+  Label predict_one(const Ref<Matrix>&, uint) const;
 
   struct SortedDistances {
     SortedDistances(uint);

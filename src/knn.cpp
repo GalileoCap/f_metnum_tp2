@@ -9,18 +9,19 @@ void KNN::fit(const Ref<Matrix>& X, const Ref<Labels>& Y) {
 Labels KNN::predict(const Ref<Matrix>& X) const {
   Labels res(X.rows());
 
-  uint i = 0;
-  for (const auto& x : X.rowwise()) //A: Guess for each vector
-    res(i++) = predict_one(x);
+  Matrix distances = distances_sqrd(X, _X);
+  for (uint x = 0; x < distances.rows(); x++)
+    res(x) = predict_one(distances, x);
 
   return res;
 }
 
-Label KNN::predict_one(const Ref<const Vector>& x) const { 
+Label KNN::predict_one(const Ref<Matrix>& distances, uint x) const { 
   SortedDistances neighbors(_k);
 
-  for (uint i = 0; i < _X.rows(); i++)
-    neighbors.emplace_back(_Y(i), (x.transpose() - _X.row(i)).norm());
+  for (uint _x = 0; _x < distances.cols(); _x++) {
+    neighbors.emplace_back(_Y(_x), distances(x, _x));
+  }
 
   return neighbors.majority();
 }
