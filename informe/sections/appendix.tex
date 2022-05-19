@@ -3,6 +3,11 @@
 
 \begin{document}
 
+\pagebreak
+\appendix 
+
+\renewcommand{\thesection}{\Roman{section}}
+
 \section{Justificación Optimización KNN} 
 \label{appendix:opt.knn}
 
@@ -21,5 +26,8 @@ Y demuestro que \(D = S_A - 2AB^t + S_B\): \\
   \phantom{\sub{D}{i}{j}} = {(row_i(A) - row_j(B))}^t(row_i(A) - row_j(B)) \tab \leftarrow {(v - w)}^t(v - w) = v^tv - 2v^tw + w^tw \\
   \phantom{\sub{D}{i}{j}} = {||row_i(A) - row_j(B)||}_2^2\ \done \tab \leftarrow ||v||_2^2 = v^tv
 \)
+
+\section{Demostración SVD} 
+\label{appendix:svd}
 
 \end{document}
