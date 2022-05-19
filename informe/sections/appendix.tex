@@ -1,0 +1,25 @@
+%&pdflatex
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\section{Justificación Optimización KNN} 
+\label{appendix:opt.knn}
+
+Siendo \(A \in \mathbb{R}^{n \times d}, B \in \mathbb{R}^{m \times d}\), quiero armar una matriz \(D \in \mathbb{R}^{n \times m}: \sub{D}{i}{j} = {||row_i(A) - row_j(B)||}_2^2\). \\
+Para ello, tomo \(S_A \in \mathbb{R}^{n \times m} : \sub{S_A}{i}{j} = {||row_i(A)||}_2^2, S_B \in \mathbb{R}^{n \times m} : \sub{S_B}{i}{j} = {||row_i(B)||}_2^2\). \\
+Y demuestro que \(D = S_A - 2AB^t + S_B\): \\
+\(
+  D = S_A - 2AB^t + 2_B \iff \\
+  \sub{D}{i}{j} = \sub{(S_A - 2AB^t + 2_B)}{i}{j} \tab \leftarrow X = Y \iff \sub{X}{i}{j} = \sub{Y}{i}{j} \\
+  \phantom{\sub{D}{i}{j}} = \sub{S_A}{i}{j} - \sub{(2AB^t)}{i}{j} + \sub{S_B}{i}{j} \tab \leftarrow \sub{(X - Y)}{i}{j} = \sub{X}{i}{j} - \sub{Y}{i}{j} \\
+  \phantom{\sub{D}{i}{j}} = \sub{S_A}{i}{j} - 2\sub{(AB^t)}{i}{j} + \sub{S_B}{i}{j} \tab \leftarrow \sub{\alpha X}{i}{j} = \alpha\sub{X}{i}{j} \\
+  \phantom{\sub{D}{i}{j}} = \sub{S_A}{i}{j} - 2row_i(A)col_j(B^t) + \sub{S_B}{i}{j} \tab \leftarrow \sub{(XY)}{i}{j} = row_i(X)col_j(Y) \\
+  \phantom{\sub{D}{i}{j}} = \sub{S_A}{i}{j} - 2row_i(A)row_j^t(B) + \sub{S_B}{i}{j} \tab \leftarrow row_i^t(X) = col_i(X^t) \\
+  \phantom{\sub{D}{i}{j}} = {||row_i(A)||}_2^2 - 2row_i(A)row_j^t(B) + {||row_j(B)||}_2^2 \tab \leftarrow \text{Definición previa} \\
+  \phantom{\sub{D}{i}{j}} = row_i^t(A)row_i(A) - 2row_i(A)row_j^t(B) + row_j^t(B)row_j(B) \tab \leftarrow ||v||_2^2 = v^tv \\
+  \phantom{\sub{D}{i}{j}} = {(row_i(A) - row_j(B))}^t(row_i(A) - row_j(B)) \tab \leftarrow {(v - w)}^t(v - w) = v^tv - 2v^tw + w^tw \\
+  \phantom{\sub{D}{i}{j}} = {||row_i(A) - row_j(B)||}_2^2\ \done \tab \leftarrow ||v||_2^2 = v^tv
+\)
+
+\end{document}

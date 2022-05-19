@@ -1,0 +1,63 @@
+%&pdflatex
+\documentclass[12pt]{article}
+\usepackage[margin=1.0in]{geometry}
+
+\usepackage{g-util}
+\usepackage{caratula.met}
+\usepackage{amsfonts, amsmath, amssymb, amsthm}
+\usepackage{graphicx, float, hyperref, wrapfig, subcaption}
+\graphicspath{ {./plots/} }
+%\usepackage[xetex]{xcolor}
+
+\usepackage{subfiles}
+
+% \theoremstyle{plain}
+\newtheorem{prop}{Proposición}
+\newtheorem{lema}{Lema}
+% \theoremstyle{remark}
+\newtheorem{obs}{Observación}
+% \theoremstyle{definition}
+\newtheorem{defi}{Definición}
+
+\setcounter{MaxMatrixCols}{12}
+
+\renewcommand{\figurename}{Fig.}
+\renewcommand{\listfigurename}{Figuras}
+\renewcommand{\tablename}{Tabla}
+\renewcommand{\contentsname}{Secciones}
+\renewcommand{\refname}{Bibliografía}
+
+\begin{document}
+
+\titulo{TP2 - Reconocimiento de Dígitos}
+%\subititulo{}
+
+\fecha{\today}
+
+\materia{Métodos Numéricos}
+\grupo{Grupo 8}
+
+\integrante{Cappella Lewi, F. Galileo}{653/20}{galileocapp@gmail.com}
+\integrante{Anachure, Juan Pablo}{99/16}{janachure@gmail.com}
+\integrante{La Tessa, Octavio}{477/16}{octalate@hotmail.com}
+
+\maketitle
+\tableofcontents
+
+\pagebreak
+
+\pagebreak
+\appendix 
+
+\renewcommand{\thesection}{\Roman{section}}
+
+\subfile{sections/appendix}
+
+\pagebreak
+\listoffigures
+
+\begin{thebibliography}{9}
+
+\end{thebibliography}
+
+\end{document}
