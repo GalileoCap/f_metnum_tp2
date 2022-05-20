@@ -4,13 +4,33 @@
 \begin{document}
 
 \section{Desarrollo} 
+\label{sec:desarrollo}
+
+\paragraph{} Para el análisis armamos un módulo de \texttt{python}.
 
 \subsection{Modelo}
+\label{sec:desarrollo.modelo}
 
 \subsection{Auto \(\alpha\)}
+\label{sec:desarrollo.auto}
 
 \subsection{Implementación}
+\label{sec:desarrollo.implementación}
+
+\paragraph{} El módulo fue implementado en \texttt{c++} usando la librería Eigen y con pybind11 lo compilamos para usarlo desde \texttt{python}. \\
+Aprovechamos la librería OpenMP para paralelizar las operaciones de Eigen.
 
 \subsubsection{Optimización KNN}
+\label{sec:desarrollo.opt_knn}
+
+\paragraph{} Originalmente calculábamos los \(k\) vecinos más cercanos calculando la distancia entre , lo que es \(\Theta(TODO)\). \\
+Esto fue mejorado para en cambio calcular una matriz \(D \in \mathbb{R}^{n \times m}\) que en la posición \(\sub{D}{i}{j}\) tiene la distancia al cuadrado entre el vector de entrenamiento \(i\) y el vector de prueba \(j\), lo que reduce las operaciones necesarias para encontrar las \(k\) distancias más chicas y es más simple de paralelizar. En total (sin paralelizar) toma \(\Theta(TODO)\) esto implica una mejora sustancial en el tiempo calcular lo buscado.
+
+%TODO: Explicar mejor, mencionando
+%TODO: Calcular los órdenes
+
+\subsection{Datos}
+
+\paragraph{} Los datos de dígitos los obtuvimos de la competencia "Digit Recognizer" de Kaggle
 
 \end{document}
